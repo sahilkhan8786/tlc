@@ -1,40 +1,63 @@
-import React, { useState } from "react";
-import { Canvas } from "@react-three/fiber";
-import { lazy, Suspense } from "react";
-import Loader from "./components/Loader";
-import { OrbitControls } from "@react-three/drei";
-import Car from "./models/Car";
+import { lazy, Suspense, useState } from "react";
+const Loader = lazy(() => import("./components/loaders/Loader"));
+const Sky = lazy(() => import("./Models/Sky"));
+const Interview = lazy(() => import("./Models/Interview"));
+const QNA = lazy(() => import("./Models/QNA"));
+const Network = lazy(() => import("./Models/Network"));
 
-
-const Island = lazy(() => import('./models/Island'))
 export default function App() {
-  const [isRotating, setIsRotating] = useState(false)
+  const [showModel, setShowModel] = useState(0);
+  function clickHandler(e) {
+
+    if (e.target.innerHTML === '+') {
+      if (showModel === 2) {
+        return setShowModel(0);
+      }
+      setShowModel(prev => prev + 1);
+    }
+
+    if (e.target.innerHTML === '-') {
+      if (showModel === 0) {
+        return setShowModel(2);
+      }
+      setShowModel(prev => prev - 1);
+    }
+  }
+
   return (
-    <div className="w-full h-screen bg-red-500 flex items-center justify-center">
+    <div className="w-full h-screen">
+      <Suspense fallback={<Loader />}>
+        <section className="w-full h-full absolute top-0 left-0 z-10">
+          <Sky />
+        </section>
 
-      <Canvas className={`${isRotating ? 'cursor-grabbing' : 'cursor-grab'}`}>
-        <pointLight intensity={80} position={[0, 0, 0]} />
-        <pointLight intensity={80} position={[2, 2, 5]} />
-        <Suspense fallback={<Loader />}>
-          {/* <ambientLight intensity={5000} /> */}
-          {/* <pointLight intensity={45} position={[0, 4, 0]} /> */}
-          {/* <ambientLight intensity={50} /> */}
+        {
+          showModel === 0 &&
+          <section className="w-full h-full absolute top-0 left-0 z-20">
+            <Interview />
+          </section>
+        }
+        {
+          showModel === 1 &&
+          <section className="w-full h-full absolute top-0 left-0 z-20">
+            <QNA />
+          </section>
+        }
+        {
+          showModel === 2 &&
+          <section className="w-full h-full absolute top-0 left-0 z-20">
+            <Network />
+          </section>
+        }
 
-          {/* <hemisphereLight intensity={5} /> */}
-          <Island
-            rotation={[0.25, 0, 0]}
-            position={[0, 1.8, 0]}
-            scale={[4, 4, 4]}
-            setIsRotating={setIsRotating}
-            isRotating={isRotating}
-          />
-          <Car
-            scale={[.1, .1, .1]}
-            position={[-0.2, -1, 2.8]}
-            rotation={[0, Math.PI / 2, 0]}
-          />
-        </Suspense>
-      </Canvas>
-    </div>
+      </Suspense>
+      <Suspense fallback={<div>Controls...</div>}>
+        <div className="absolute bottom-5 right-0 z-30 w-52 bg-red-400 flex items-center justify-between text-5xl">
+          <span onClick={clickHandler}>+</span>
+          <span onClick={clickHandler}>-</span>
+        </div>
+      </Suspense>
+
+    </div >
   )
 }
