@@ -1,63 +1,195 @@
-import { lazy, Suspense, useState } from "react";
-const Loader = lazy(() => import("./components/loaders/Loader"));
-const Sky = lazy(() => import("./Models/Sky"));
-const Interview = lazy(() => import("./Models/Interview"));
-const QNA = lazy(() => import("./Models/QNA"));
-const Network = lazy(() => import("./Models/Network"));
+import { lazy, Suspense, useState, useEffect } from "react";
+const CanvasContainer = lazy(() => import("./components/CanvasContainer"));
 
 export default function App() {
-  const [showModel, setShowModel] = useState(0);
-  function clickHandler(e) {
+  const initialPositions = {
+    Interview: {
+      position: [0, -1, 0.2],
+      scale: [2.5, 2.5, 2.5],
+    },
+    QNA: {
+      position: [5, 1.5, 0.2],
+      scale: [0.5, 0.5, 0.5],
+    },
+    Network: {
+      position: [3.5, 3.5, -3.8],
+      scale: [0.5, 0.5, 0.5],
+    },
+    Chronological: {
+      position: [-0.5, 3.5, -5],
+      scale: [0.5, 0.5, 0.5],
+    },
+    LearningLeap: {
+      position: [-3, 3, -3],
+      scale: [0.5, 0.5, 0.5],
+    },
+    WeeklyFeature: {
+      position: [-5, 2, -2],
+      scale: [0.5, 0.5, 0.5],
+    },
+    LearningModule: {
+      position: [-4, 0.5, 1],
+      scale: [0.5, 0.5, 0.5],
+    },
+  };
 
-    if (e.target.innerHTML === '+') {
-      if (showModel === 2) {
-        return setShowModel(0);
-      }
-      setShowModel(prev => prev + 1);
-    }
+  const smallScreenPositions = {
+    Interview: {
+      position: [0, -1, 0.2],
+      scale: [1.5, 1.5, 1.5],
+    },
+    QNA: {
+      position: [3, 1, 0.2],
+      scale: [0.3, 0.3, 0.3],
+    },
+    Network: {
+      position: [2.5, 2.5, -2.8],
+      scale: [0.3, 0.3, 0.3],
+    },
+    Chronological: {
+      position: [-0.5, 2.5, -3.5],
+      scale: [0.3, 0.3, 0.3],
+    },
+    LearningLeap: {
+      position: [-2, 2, -2],
+      scale: [0.3, 0.3, 0.3],
+    },
+    WeeklyFeature: {
+      position: [-3, 1, -1],
+      scale: [0.3, 0.3, 0.3],
+    },
+    LearningModule: {
+      position: [-2.5, 0.5, 0.5],
+      scale: [0.3, 0.3, 0.3],
+    },
+  };
 
-    if (e.target.innerHTML === '-') {
-      if (showModel === 0) {
-        return setShowModel(2);
+  const [positions, setPositions] = useState(initialPositions);
+  const [activeModel, setActiveModel] = useState("Interview");
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setPositions(smallScreenPositions);
+      } else {
+        setPositions(initialPositions);
       }
-      setShowModel(prev => prev - 1);
-    }
-  }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Call initially to set the correct state based on current window size
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const moveLeft = () => {
+    setPositions((prevPositions) => {
+      const keys = Object.keys(prevPositions);
+      const newPositions = {};
+      const firstPosition = prevPositions[keys[0]];
+
+      for (let i = 0; i < keys.length - 1; i++) {
+        newPositions[keys[i]] = {
+          ...prevPositions[keys[i + 1]],
+          scale: prevPositions[keys[i + 1]].scale,
+        };
+      }
+      newPositions[keys[keys.length - 1]] = {
+        ...firstPosition,
+        scale: prevPositions[keys[0]].scale,
+      };
+
+      return newPositions;
+    });
+
+    setActiveModel((prevModel) => {
+      const keys = Object.keys(positions);
+      const currentIndex = keys.indexOf(prevModel);
+      const nextIndex = (currentIndex - 1 + keys.length) % keys.length;
+      return keys[nextIndex];
+    });
+  };
+
+  const moveRight = () => {
+    setPositions((prevPositions) => {
+      const keys = Object.keys(prevPositions);
+      const newPositions = {};
+
+      const lastPosition = {
+        position: prevPositions[keys[keys.length - 1]].position.slice(),
+        scale: prevPositions[keys[keys.length - 1]].scale.slice(),
+      };
+
+      for (let i = 0; i < keys.length; i++) {
+        const currentKey = keys[i];
+        const nextKey = keys[(i + 1) % keys.length];
+
+        newPositions[nextKey] = {
+          position: prevPositions[currentKey].position.slice(),
+          scale: prevPositions[currentKey].scale.slice(),
+        };
+      }
+
+      newPositions[keys[0]] = lastPosition;
+
+      return newPositions;
+    });
+
+    setActiveModel((prevModel) => {
+      const keys = Object.keys(positions);
+      const currentIndex = keys.indexOf(prevModel);
+      const nextIndex = (currentIndex + 1) % keys.length;
+      return keys[nextIndex];
+    });
+  };
+
+  const content = {
+    Interview: {
+      title: "Interview",
+      description: "Watch our exclusive interviews",
+    },
+    QNA: {
+      title: "QNA",
+      description: "Get answers to your questions",
+    },
+    Network: {
+      title: "Network",
+      description: "Connect with professionals",
+    },
+    Chronological: {
+      title: "Chronological",
+      description: "Track events chronologically",
+    },
+    LearningLeap: {
+      title: "Learning Leap",
+      description: "Take a leap in learning",
+    },
+    WeeklyFeature: {
+      title: "Weekly Feature",
+      description: "Check out our weekly features",
+    },
+    LearningModule: {
+      title: "Learning Module",
+      description: "Explore learning modules",
+    },
+  };
 
   return (
-    <div className="w-full h-screen">
-      <Suspense fallback={<Loader />}>
-        <section className="w-full h-full absolute top-0 left-0 z-10">
-          <Sky />
-        </section>
-
-        {
-          showModel === 0 &&
-          <section className="w-full h-full absolute top-0 left-0 z-20">
-            <Interview />
-          </section>
-        }
-        {
-          showModel === 1 &&
-          <section className="w-full h-full absolute top-0 left-0 z-20">
-            <QNA />
-          </section>
-        }
-        {
-          showModel === 2 &&
-          <section className="w-full h-full absolute top-0 left-0 z-20">
-            <Network />
-          </section>
-        }
-
-      </Suspense>
-      <Suspense fallback={<div>Controls...</div>}>
-        <div className="absolute bottom-5 right-0 z-30 w-52 bg-red-400 flex items-center justify-between text-5xl">
-          <span onClick={clickHandler}>+</span>
-          <span onClick={clickHandler}>-</span>
-        </div>
+    <section className="w-full h-screen">
+      <div className="z-20 w-full absolute bottom-0 left-0 bg-red-50 p-4 flex items-center justify-around">
+        <h1 className="cursor-pointer hover:bg-red-600 p-3" onClick={moveLeft}>LEFT</h1>
+        <h1 className="cursor-pointer hover:bg-red-600 p-3" onClick={moveRight}>RIGHT</h1>
+      </div>
+      <Suspense fallback={<p>Loading model...</p>}>
+        <CanvasContainer positions={positions} />
       </Suspense>
 
-    </div >
-  )
+      <div className="absolute top-24 left-1/2 -translate-x-1/2 p-4 bg-white/45 rounded-lg text-center w-full mx-auto sm:w-fit">
+        <h1 className="text-3xl sm:text-5xl">{content[activeModel].title}</h1>
+        <p>{content[activeModel].description}</p>
+      </div>
+    </section>
+  );
 }
