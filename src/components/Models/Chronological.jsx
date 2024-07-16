@@ -1,12 +1,11 @@
 import { useGLTF } from '@react-three/drei';
-import React, { useRef } from 'react'
-import chronologicalScene from '../../assets/3d/chronological_scene.glb'
-export default function Chronological({ ...props }) {
-    const chronologicalRef = useRef();
-    const model = useGLTF(chronologicalScene, true)
+import React, { memo } from 'react'
+function Chronological({ ...props }) {
+    const model = useGLTF('https://res.cloudinary.com/dyupdbnls/image/upload/v1721144144/chronological_scene_j6ms43.glb', true)
     return (
-        <group ref={chronologicalRef} {...props}>
+        <group  {...props}>
             <primitive object={model.scene} />
         </group>
     )
 }
+export default memo(Chronological)

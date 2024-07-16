@@ -1,10 +1,13 @@
-import { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, Suspense, memo } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three'
+import * as THREE from 'three';
+import { Html } from '@react-three/drei';
+
 function CustomMotionGroup({ position, scale, children, ...props }) {
     const ref = useRef();
     const controls = useAnimation();
+
     useEffect(() => {
         controls.start({
             position,
@@ -21,10 +24,12 @@ function CustomMotionGroup({ position, scale, children, ...props }) {
     });
 
     return (
-        <motion.group {...props} ref={ref}>
-            {children}
-        </motion.group>
+        <Suspense fallback={<Html><span /></Html>}>
+            <motion.group {...props} ref={ref}>
+                {children}
+            </motion.group>
+        </Suspense>
     );
 }
 
-export default CustomMotionGroup;
+export default memo(CustomMotionGroup);

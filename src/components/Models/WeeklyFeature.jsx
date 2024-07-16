@@ -1,12 +1,12 @@
-import React, { useRef } from 'react'
-import weeklyFeatureScene from '../../assets/3d/weekly-features_scene.glb'
+import React, { memo } from 'react'
 import { useGLTF } from '@react-three/drei'
-export default function WeeklyFeature({ ...props }) {
-    const weeklyFeatureRef = useRef(null)
-    const model = useGLTF(weeklyFeatureScene, true)
+function WeeklyFeature({ ...props }) {
+
+    const model = useGLTF('https://res.cloudinary.com/dyupdbnls/image/upload/v1721144164/weekly-features_scene_pn88bv.glb', true)
     return (
-        <group ref={weeklyFeatureRef} {...props}>
+        <group {...props}>
             <primitive object={model.scene} />
         </group>
     )
 }
+export default memo(WeeklyFeature)

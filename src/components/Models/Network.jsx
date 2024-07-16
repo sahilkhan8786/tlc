@@ -1,12 +1,11 @@
 import { useGLTF } from '@react-three/drei'
-import React, { useRef } from 'react'
-import networkScene from '../../assets/3d/network_scene.glb'
-export default function Network({ ...props }) {
-    const networkRef = useRef(null)
-    const model = useGLTF(networkScene, true)
+import React, { memo } from 'react'
+function Network({ ...props }) {
+    const model = useGLTF('https://res.cloudinary.com/dyupdbnls/image/upload/v1721144142/network_scene_qvibmo.glb', true)
     return (
-        <group {...props} ref={networkRef}>
+        <group {...props}>
             <primitive object={model.scene} />
         </group>
     )
 }
+export default memo(Network)

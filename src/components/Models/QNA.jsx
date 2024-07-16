@@ -1,12 +1,11 @@
 import { useGLTF } from '@react-three/drei'
-import React, { useRef } from 'react'
-import qnaScene from '../../assets/3d/qna_scene.glb'
-export default function QNA({ ...props }) {
-    const qnaRef = useRef(null)
-    const model = useGLTF(qnaScene, true);
+import React, { memo } from 'react'
+function QNA({ ...props }) {
+    const model = useGLTF('https://res.cloudinary.com/dyupdbnls/image/upload/v1721144144/qna_scene_jfdgs7.glb', true);
     return (
-        <group {...props} ref={qnaRef}>
+        <group {...props} >
             <primitive object={model.scene} />
         </group>
     )
 }
+export default memo(QNA)

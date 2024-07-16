@@ -1,10 +1,9 @@
 import { useAnimations, useGLTF } from '@react-three/drei'
-import React, { useEffect, useRef } from 'react'
-import learningModuleScene from '../../assets/3d/learning_module_scene.glb'
+import React, { memo, useEffect, useRef } from 'react'
 
-export default function LearningModule({ ...props }) {
+function LearningModule({ ...props }) {
     const learningModuleRef = useRef(null)
-    const model = useGLTF(learningModuleScene, true)
+    const model = useGLTF('https://res.cloudinary.com/dyupdbnls/image/upload/v1721144174/learning_module_scene_m8upmu.glb', true)
     const { actions } = useAnimations(model.animations, learningModuleRef)
 
     useEffect(() => {
@@ -16,3 +15,4 @@ export default function LearningModule({ ...props }) {
         </group>
     )
 }
+export default memo(LearningModule)

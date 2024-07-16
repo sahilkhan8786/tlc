@@ -1,14 +1,13 @@
 import { useGLTF } from '@react-three/drei'
-import React, { useRef } from 'react'
-import learningLeapScene from '../../assets/3d/learning_leaps_scene.glb'
+import React, { memo } from 'react'
 
 
-export default function LearningLeap({ ...props }) {
-    const learningLeapRef = useRef(null)
-    const model = useGLTF(learningLeapScene, true)
+function LearningLeap({ ...props }) {
+    const model = useGLTF('https://res.cloudinary.com/dyupdbnls/image/upload/v1721144158/learning_leaps_scene_k7dsuk.glb', true)
     return (
-        <group ref={learningLeapRef} {...props}>
+        <group {...props}>
             <primitive object={model.scene} />
         </group>
     )
 }
+export default memo(LearningLeap)

@@ -1,16 +1,15 @@
 import { useGLTF } from '@react-three/drei'
-import React, { useRef } from 'react'
-import interviewScene from '../../assets/3d/interview_scene.glb'
+import React, { memo } from 'react'
 
-export default function Interview({ ...props }) {
-    const interviewRef = useRef(null)
-    const model = useGLTF(interviewScene, true);
+function Interview({ ...props }) {
+    const model = useGLTF('https://res.cloudinary.com/dyupdbnls/image/upload/v1721144162/interview_scene_grxzf8.glb', true);
 
 
     return (
         <group >
-            <primitive object={model.scene} {...props} ref={interviewRef} />
+            <primitive object={model.scene} {...props} />
         </group>
 
     )
 }
+export default memo(Interview)
