@@ -4,15 +4,15 @@ export const contentInfo = {
         description: "Watch our exclusive interviews",
     },
     QNA: {
-        title: "QNA",
+        title: "Questions & Answers",
         description: "Get answers to your questions",
     },
     Network: {
-        title: "Network",
+        title: "Networking Opportunities",
         description: "Connect with professionals",
     },
     Chronological: {
-        title: "Chronological",
+        title: "Archives",
         description: "Track events chronologically",
     },
     LearningLeap: {
@@ -24,7 +24,7 @@ export const contentInfo = {
         description: "Check out our weekly features",
     },
     LearningModule: {
-        title: "Learning Module",
+        title: "Learning Adventure Modules",
         description: "Explore learning modules",
     },
 };

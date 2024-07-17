@@ -1,7 +1,7 @@
 import { useGLTF } from '@react-three/drei'
 import React, { memo } from 'react'
 function Network({ ...props }) {
-    const model = useGLTF('https://res.cloudinary.com/dyupdbnls/image/upload/v1721144142/network_scene_qvibmo.glb', true)
+    const model = useGLTF('https://res.cloudinary.com/dyupdbnls/image/upload/v1721191126/final_netwoking_scene_fgfhe4.glb', true)
     return (
         <group {...props}>
             <primitive object={model.scene} />
