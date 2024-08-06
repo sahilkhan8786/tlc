@@ -64,11 +64,15 @@ function Buttons({ positions, setActiveModel, setPositions }) {
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <div className="z-20 w-full absolute bottom-0 left-0 bg-red-50 p-4 flex items-center justify-around">
-                <h1 className="cursor-pointer hover:bg-red-600 p-3" onClick={moveLeft}>LEFT</h1>
-                <h1 className="cursor-pointer hover:bg-red-600 p-3" onClick={moveRight}>RIGHT</h1>
+            <div className="z-20 w-full absolute bottom-0 left-0  p-4   ">
+                <article className='max-w-screen-2xl mx-auto backdrop-blur-xl bg-white/40 flex items-center justify-around rounded-xl gap-1 p-2'>
+                    <h1 className="cursor-pointer hover:bg-gray-100 p-3 text-5xl rounded-xl flex items-center justify-center" onClick={moveLeft}>&larr;</h1>
+                    <h1 className='text-xl font-semibold uppercase sm:text-3xl text-center'>Explore the learning Land</h1>
+                    <h1 className="cursor-pointer hover:bg-gray-100 p-3 text-5xl rounded-xl flex items-center justify-center" onClick={moveRight}>&rarr;</h1>
+                </article>
             </div>
         </Suspense>
+
     );
 }
 
